@@ -81,4 +81,4 @@ test:
 #
 production:
   <<: *default
-url: <%= ENV['MARKHOPE_DATABASE_URL'] %>
+  url: <%= ENV['MARKHOPE_DATABASE_URL'] %>
