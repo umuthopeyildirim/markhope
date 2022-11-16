@@ -4,7 +4,6 @@ import { Hero, Button } from 'react-daisyui'
 import { BsFillCircleFill, BsGithub } from 'react-icons/bs'
 import { format } from 'date-fns';
 import { MySwal } from '../../utils/SweetAlert'
-import { createImage } from '../../utils/Picture'
 
 function DeploymentHero(){
     const { id } = useParams()
@@ -29,7 +28,7 @@ function DeploymentHero(){
                 }
             })
         )
-    }, [id, deployed])
+    }, [id, deployed, site.domain])
 
     // Create delete function
     function deleteSite() {

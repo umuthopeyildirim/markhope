@@ -1,6 +1,12 @@
 class SitesController < ApplicationController
   before_action :set_site, only: [:show, :update, :destroy]
 
+  def get_user
+    # Get the current user username
+    @user = User.find(current_user.id)
+    render json: { username: @user.username, name: @user.name, email: @user.email }
+  end
+
   # GET /sites
   def index
     # Get all sites for the current user

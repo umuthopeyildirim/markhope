@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext} from "react"
 import { Card } from "react-daisyui"
 import { AiFillGithub, AiOutlineBranches } from "react-icons/ai";
 import {format} from 'date-fns';
-
+import { UserContext } from "../../views/Dashboard"
 function Overview(){
     // Get the projects from the API
     const [site, setSites] = useState([]);
+    const user = useContext(UserContext);
 
     useEffect(() => {
         fetch(process.env.REACT_APP_API_URL+'/sites',{
@@ -31,7 +32,7 @@ function Overview(){
                                 <Card.Title tag="h2" className="flex flex-col">
                                     <img src="/img/logo.svg" alt={site.name} className="w-10 h-10 p-2"/>
                                     {site.name}
-                                    <span className="text-sm text-gray-400">by MarkHope</span>
+                                    <span className="text-sm text-gray-400">{user.name}</span>
                                 </Card.Title>
                                 <p className="flex flex-row items-center"><AiOutlineBranches />From {site.repo_branch} </p>
                                 <p className="flex flex-row items-center">{format(new Date(site.created_at), 'p, dd/mm/yyyy')} via <AiFillGithub className="mx-2" /></p>
