@@ -18,9 +18,7 @@ function Overview(){
         .then(response => response.json())
         .then(data => setSites(data))
     }, [])
-
-    console.log(site)
-
+    
     return (
         // If site is empty, show loading
         site.length !== 0 ? (
@@ -44,7 +42,14 @@ function Overview(){
             </div>
         </>
         ) : (
-            <h1>Wow, very lonely</h1>
+            <>
+                {/* Center items */}
+                <div className="flex flex-col items-center justify-center content-center place-content-center min-h-screen">
+                    <img src="/img/empty.png" alt="MarkHope" className="h-40 p-2"/>
+                    <h1 className="text-3xl text-white">Wow, such empty</h1>
+                    <p className="text-xl">Add a new project to fill this place.</p>
+                </div>
+            </>
         )
     )
 }

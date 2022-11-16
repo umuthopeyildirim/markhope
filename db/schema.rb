@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2022_11_04_175544) do
     t.string "tagline"
     t.string "email"
     t.text "description"
+    t.string "image_url"
     t.string "repo_url"
     t.string "repo_name"
     t.string "repo_branch"

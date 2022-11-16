@@ -9,17 +9,13 @@ function NewProject({ setIsImport, githubURL, setGithubURL }){
     // TODO: Add a function to handle the form submission
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("Sending request to the Github to check if the repo exists. URL: " + githubURL)
-
         fetch("https://api.github.com/repos/" + githubURL)
         .then(
             response => {
                 if(response.status === 200){
-                    console.log("Repo exists")
                     setIsImport(true)
                 }
                 else{
-                    console.log("Repo does not exist")
                     setErrors(["Repo does not exist"])
                 }
             }

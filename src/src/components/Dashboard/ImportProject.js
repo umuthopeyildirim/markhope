@@ -18,6 +18,7 @@ function Import({ githubURL }){
             setError("Please fill all the fields")
         }
         else{
+            e.currentTarget.disabled = true;
             setError("")
             fetch(process.env.REACT_APP_API_URL+'/sites/',{
                 method: 'POST',
@@ -33,12 +34,13 @@ function Import({ githubURL }){
                     description: description,
                     repo_url: "https://github.com/"+githubURL,
                     repo_name: githubURL.split('/')[1],
-                    repo_branch: "main"
+                    repo_branch: "main",
+                    domain: "https://sites.markhope.ml/"+githubURL,
+                    image_url: "https://storage.googleapis.com/screenshot-jobs-portfolio-umut-yildirim/"+githubURL+".png"
                 })
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 MySwal.fire({
                     title: 'Success!',
                     text: 'Your site has been created.',

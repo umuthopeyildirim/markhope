@@ -1,13 +1,15 @@
 import { useParams } from "react-router-dom"
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import { Hero, Button } from 'react-daisyui'
 import { BsFillCircleFill, BsGithub } from 'react-icons/bs'
 import { format } from 'date-fns';
 import { MySwal } from '../../utils/SweetAlert'
+import { createImage } from '../../utils/Picture'
 
 function DeploymentHero(){
     const { id } = useParams()
     const [site, setSite] = useState([]);
+    const [deployed, setDeployed] = useState(false);
 
     useEffect(() => {
         fetch(process.env.REACT_APP_API_URL+'/sites/'+id,{
@@ -19,10 +21,18 @@ function DeploymentHero(){
         })
         .then(response => response.json())
         .then(data => setSite(data))
-    }, [id])
+        .then(
+            fetch(site.domain)
+            .then(response => {
+                if(response.status === 200){
+                    setDeployed(true)
+                }
+            })
+        )
+    }, [id, deployed])
 
     // Create delete function
-    const deleteSite = () => {
+    function deleteSite() {
         MySwal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -33,15 +43,14 @@ function DeploymentHero(){
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(process.env.REACT_APP_API_URL+'/sites/'+id,{
+                fetch(process.env.REACT_APP_API_URL + '/sites/' + id, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                     }
                 })
-                .then(response => response.json())
-                .then(data => console.log(data))
+                    .then(response => response.json());
                 // Redirect to dashboard using sweetalert
                 MySwal.fire({
                     title: 'Deleted!',
@@ -50,14 +59,13 @@ function DeploymentHero(){
                     confirmButtonText: 'Ok'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "/dashboard"
+                        window.location.href = "/dashboard";
                     }
-                })
+                });
             }
-        })
+        });
     }
 
-    console.log(site)
     return (
         site.length !== 0 ? (
         <>
@@ -69,7 +77,7 @@ function DeploymentHero(){
                             {site.name}
                         </h1>
 
-                        <div className='basis-2/4'>
+                        <div className='basis-2/4 ml-40 place-items-end place-content-end'>
                             <Button href={site.repo_url} target="_blank" variant="outline" size="sm" color="default">View Git Repository</Button>
                             <Button href={site.domain} target="_blank" className="ml-2" size="sm" color="primary">Visit</Button>
                             <Button onClick={deleteSite} target="_blank" className="ml-2 right-0" size="sm" color="error">Delete</Button>
@@ -91,36 +99,35 @@ function DeploymentHero(){
             <Hero >
                 <Hero.Content className='w-10/12 bg-black border rounded my-4'>
                     <img
-                        src="/img/DeploymentDemo.png"
+                        src={site.image_url !== null ? site.image_url : "https://storage.googleapis.com/screenshot-jobs-portfolio-umut-yildirim/placeholder.jpg"}
                         alt="Deployment Demo"
                         className="max-w-sm rounded-lg shadow-2xl border basis-4/12"
                     />
                     <div className='w-full flex flex-col'>
                         <span className='font-bold'>Deployment</span>
-                        <a href={site.domain} rel="noreferrer" target="_blank" className="text-green-600 mb-2 font-light after:content-['_↗'] ...">
-                            {
-                                site.domain === null ?
-                                'Please wait for the deployment to finish' 
-                                :
-                                site.domain
-                            }
-                        </a>
+                        <a href={site.domain} rel="noreferrer" target="_blank" className="text-green-600 mb-2 font-light after:content-['_↗'] ...">{site.domain}</a>
                         <span className='font-bold'>Status</span>
                         <p className="flex flex-row items-center font-light mb-2"> 
                         {
-                            site.domain === null ?
-                                <BsFillCircleFill className='text-red-600 mr-2'/>
-                            : 
+                            deployed === true ?
                                 <BsFillCircleFill className='text-green-600 mr-2'/>
+                            : 
+                                <BsFillCircleFill className='text-red-600 mr-2'/>
+
                         }
                         {
-                            site.domain === null ? 'Not Deployed' : 'Deployed'
+                            deployed === true ? 'Deployed' : 'Not Deployed'
                         }
                         </p>
                         <span className='font-bold'>Created At</span>
                         <p className="flex flex-row items-center font-light mb-2">{format(new Date(site.created_at), 'p, dd/mm/yyyy')} by umuthopeyildirim</p>
                         <span className='font-bold'>Branch</span>
                         <p className="flex flex-row items-center font-light mb-2"><BsGithub className='mr-2'/>{site.repo_branch}</p>
+                        <span className='font-bold'>Github Secrets</span>
+                        <p>FTP Server: ftp.umutyildirim.com</p>
+                        <p>FTP User: markhope@umutyildirim.com</p>
+                        <p>FTP Pass: qywWsCyEQMM1</p>
+                        
                     </div>
                 </Hero.Content>
             </Hero>

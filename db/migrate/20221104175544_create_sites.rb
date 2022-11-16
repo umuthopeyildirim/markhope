@@ -8,6 +8,7 @@ class CreateSites < ActiveRecord::Migration[6.1]
       t.string :tagline
       t.string :email
       t.text :description
+      t.string :image_url
       t.string :repo_url
       t.string :repo_name
       t.string :repo_branch
