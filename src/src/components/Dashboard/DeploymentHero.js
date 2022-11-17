@@ -21,7 +21,7 @@ function DeploymentHero(){
         .then(response => response.json())
         .then(data => setSite(data))
         .then(
-            fetch(site.domain)
+            fetch(site.domain+"/index.html")
             .then(response => {
                 if(response.status === 200){
                     setDeployed(true)
