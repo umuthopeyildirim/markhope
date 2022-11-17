@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { datadogRum } from '@datadog/browser-rum'
 
 import './index.css';
 
@@ -20,6 +21,21 @@ import New from './views/New';
 import Deployment from './views/Deployment';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+datadogRum.init({
+  applicationId: '62cf36c0ff101e7285a44053e8b0a901cd4ca14a',
+  clientToken: 'pube60c04adf0bb612f3572af4cdef498e5',
+  site: 'datadoghq.com',
+   service: 'markhope',
+   env: 'production',
+   version: '1.0.0',
+  sampleRate: 100,
+  sessionReplaySampleRate: 100, // if not included, the default is 100
+  trackResources: true,
+  trackLongTasks: true,
+  trackInteractions: true,
+})
+
 root.render(
   <BrowserRouter>
     <Routes>
